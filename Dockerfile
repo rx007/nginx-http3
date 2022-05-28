@@ -1,4 +1,4 @@
-FROM nginx AS build
+FROM nginx:1.22 AS build
 
 WORKDIR /src
 RUN apt-get update && \
@@ -20,7 +20,7 @@ RUN apt-get install -y mercurial libperl-dev libpcre3-dev zlib1g-dev libxslt1-de
                    --with-cc-opt="-I/src/boringssl/include" --with-ld-opt="-L/src/boringssl/build/ssl -L/src/boringssl/build/crypto" && \
     make
 
-FROM nginx
+FROM nginx:1.22
 COPY --from=build /src/nginx-quic/objs/nginx /usr/sbin
 RUN /usr/sbin/nginx -V > /dev/stderr
 EXPOSE 80 443
